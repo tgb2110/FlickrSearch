@@ -10,4 +10,7 @@
 
 @interface TMTViewController : UIViewController
 
+@property (nonatomic) NSInteger selectedPhotoIndex;
+@property (strong, nonatomic) NSString *searchTerm;
+
 @end

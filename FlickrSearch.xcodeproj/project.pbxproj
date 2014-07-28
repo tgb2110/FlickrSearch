@@ -41,6 +41,10 @@
 		3BE2E0EB19868E7C00A5D874 /* search_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BE2E0D719868E7C00A5D874 /* search_field@2x.png */; };
 		3BE2E0EC19868E7C00A5D874 /* search_text.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BE2E0D819868E7C00A5D874 /* search_text.png */; };
 		3BE2E0ED19868E7C00A5D874 /* search_text@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3BE2E0D919868E7C00A5D874 /* search_text@2x.png */; };
+		3BE2E0F2198692AF00A5D874 /* Flickr.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BE2E0EF198692AF00A5D874 /* Flickr.m */; };
+		3BE2E0F3198692AF00A5D874 /* FlickrPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BE2E0F1198692AF00A5D874 /* FlickrPhoto.m */; };
+		3BE2E0F61986A67100A5D874 /* TMTFlickrPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BE2E0F51986A67100A5D874 /* TMTFlickrPhotoCell.m */; };
+		3BE2E0F91986B97400A5D874 /* TMTDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BE2E0F81986B97400A5D874 /* TMTDetailsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +97,14 @@
 		3BE2E0D719868E7C00A5D874 /* search_field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_field@2x.png"; sourceTree = "<group>"; };
 		3BE2E0D819868E7C00A5D874 /* search_text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_text.png; sourceTree = "<group>"; };
 		3BE2E0D919868E7C00A5D874 /* search_text@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_text@2x.png"; sourceTree = "<group>"; };
+		3BE2E0EE198692AF00A5D874 /* Flickr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flickr.h; sourceTree = "<group>"; };
+		3BE2E0EF198692AF00A5D874 /* Flickr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Flickr.m; sourceTree = "<group>"; };
+		3BE2E0F0198692AF00A5D874 /* FlickrPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlickrPhoto.h; sourceTree = "<group>"; };
+		3BE2E0F1198692AF00A5D874 /* FlickrPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlickrPhoto.m; sourceTree = "<group>"; };
+		3BE2E0F41986A67100A5D874 /* TMTFlickrPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMTFlickrPhotoCell.h; sourceTree = "<group>"; };
+		3BE2E0F51986A67100A5D874 /* TMTFlickrPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMTFlickrPhotoCell.m; sourceTree = "<group>"; };
+		3BE2E0F71986B97400A5D874 /* TMTDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMTDetailsViewController.h; sourceTree = "<group>"; };
+		3BE2E0F81986B97400A5D874 /* TMTDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMTDetailsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,8 +167,16 @@
 				3BE2E09F19868E7000A5D874 /* TMTAppDelegate.h */,
 				3BE2E0A019868E7000A5D874 /* TMTAppDelegate.m */,
 				3BE2E0A219868E7000A5D874 /* Main.storyboard */,
+				3BE2E0F71986B97400A5D874 /* TMTDetailsViewController.h */,
+				3BE2E0F81986B97400A5D874 /* TMTDetailsViewController.m */,
 				3BE2E0A519868E7000A5D874 /* TMTViewController.h */,
 				3BE2E0A619868E7000A5D874 /* TMTViewController.m */,
+				3BE2E0F41986A67100A5D874 /* TMTFlickrPhotoCell.h */,
+				3BE2E0F51986A67100A5D874 /* TMTFlickrPhotoCell.m */,
+				3BE2E0EE198692AF00A5D874 /* Flickr.h */,
+				3BE2E0EF198692AF00A5D874 /* Flickr.m */,
+				3BE2E0F0198692AF00A5D874 /* FlickrPhoto.h */,
+				3BE2E0F1198692AF00A5D874 /* FlickrPhoto.m */,
 				3BE2E0A819868E7000A5D874 /* Images.xcassets */,
 				3BE2E0C519868E7C00A5D874 /* Assets */,
 				3BE2E09719868E7000A5D874 /* Supporting Files */,
@@ -339,7 +359,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BE2E0A719868E7000A5D874 /* TMTViewController.m in Sources */,
+				3BE2E0F91986B97400A5D874 /* TMTDetailsViewController.m in Sources */,
 				3BE2E0A119868E7000A5D874 /* TMTAppDelegate.m in Sources */,
+				3BE2E0F2198692AF00A5D874 /* Flickr.m in Sources */,
+				3BE2E0F61986A67100A5D874 /* TMTFlickrPhotoCell.m in Sources */,
+				3BE2E0F3198692AF00A5D874 /* FlickrPhoto.m in Sources */,
 				3BE2E09D19868E7000A5D874 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

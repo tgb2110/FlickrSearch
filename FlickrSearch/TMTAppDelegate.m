@@ -13,6 +13,15 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    /*FlickrSearch - Demo Build
+     Key:
+     37150e1d9a9679007e9f0df9f8741fec
+     
+     Secret:
+     fb2e042e7b3ec8ad
+     */
+     
     return YES;
 }
 							
