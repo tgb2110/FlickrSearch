@@ -7,10 +7,10 @@
 //
 
 #import "TMTViewController.h"
-#import "Flickr.h"
-#import "FlickrPhoto.h"
-#import "TMTFlickrPhotoCell.h"
 #import "TMTDetailsViewController.h"
+#import "TMFYelpAPIClient.h"
+#import "TMFYelpLocation.h"
+#import "TMTYelpLocationCell.h"
 
 @interface TMTViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -22,7 +22,7 @@
 
 @property(nonatomic, strong) NSMutableDictionary *searchResults;
 @property(nonatomic, strong) NSMutableArray *searches;
-@property(nonatomic, strong) Flickr *flickr;
+@property (strong, nonatomic) TMFYelpLocation *yelpManager;
 
 @property(nonatomic, weak) IBOutlet UICollectionView *collectionView;
 
@@ -33,6 +33,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.yelpLocations = [NSMutableArray new];
+    self.locationManager = [CLLocationManager new];
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.delegate = self;
+    [self.locationManager startUpdatingLocation];
+    
+    self.startLocation = nil;
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_cork.png"]];
     
@@ -48,10 +56,16 @@
     
     self.searches = [@[] mutableCopy];
     self.searchResults = [@{} mutableCopy];
-    self.flickr = [[Flickr alloc] init];
+    self.yelpManager = [[TMFYelpLocation alloc] init];
     
     //[self.collectionView registerClass:[TMTFlickrPhotoCell class] forCellWithReuseIdentifier:@"FlickrCell"];
     
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.locationManager stopUpdatingLocation];
 }
 
 
@@ -67,42 +81,76 @@
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
     // 1
-    [self.flickr searchFlickrForTerm:textField.text completionBlock:^(NSString *searchTerm, NSArray *results, NSError *error) {
-        if(results && [results count] > 0) {
-            // 2
-            if(![self.searches containsObject:searchTerm]) {
-                NSLog(@"Found %d photos matching %@", [results count],searchTerm);
-                [self.searches insertObject:searchTerm atIndex:0];
-                self.searchResults[searchTerm] = results; }
-            // 3
-            dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.collectionView reloadData];
-            });
-        } else { // 1
-            NSLog(@"Error searching Flickr: %@", error.localizedDescription);
-        } }];
-    [textField resignFirstResponder];
+    //    [self.flickr searchFlickrForTerm:textField.text completionBlock:^(NSString *searchTerm, NSArray *results, NSError *error) {
+//        if(results && [results count] > 0) {
+//            // 2
+//            if(![self.searches containsObject:searchTerm]) {
+//                NSLog(@"Found %d photos matching %@", [results count],searchTerm);
+//                [self.searches insertObject:searchTerm atIndex:0];
+//                self.searchResults[searchTerm] = results; }
+//            // 3
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                    [self.collectionView reloadData];
+//            });
+//        } else { // 1
+//            NSLog(@"Error searching Flickr: %@", error.localizedDescription);
+//        } }];
+//    [textField resignFirstResponder];
     return YES;
+}
+
+#pragma mark - Core Location Delegate Methods
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    CLLocation *newLocation = [locations lastObject];
+    CLLocation *oldLocation;
+    if (locations.count > 1) {
+        oldLocation = [locations objectAtIndex:locations.count-2];
+    }
+    
+    NSString *latitude = [NSString stringWithFormat:@"%f", newLocation.coordinate.latitude];
+    NSString *longitude = [NSString stringWithFormat:@"%f", newLocation.coordinate.longitude];
+    
+    [TMFYelpAPIClient fetchYelpLocationsAtLatitude: latitude andLongitude:longitude withCompletion:^(NSDictionary *locations) {
+        NSArray *businesses = locations[@"businesses"];
+        for (NSInteger i = 0; i < businesses.count; i++) {
+            TMFYelpLocation *location = [TMFYelpLocation new];
+            location.name = businesses[i][@"name"];
+            location.imageURL = [NSURL URLWithString:businesses[i][@"image_url"]];
+            
+            [self.yelpLocations addObject:location];
+        }
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            [self.collectionView reloadData];
+        }];
+    }];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"%@", error.localizedDescription);
 }
 
 #pragma mark - UICollectionView Datasource
 // 1
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
-    NSString *searchTerm = self.searches[section];
-    return [self.searchResults[searchTerm] count];
+    return [self.yelpLocations count];
 }
 // 2
 - (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
-    return [self.searches count];
+    return 1;
 }
 // 3
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    TMTFlickrPhotoCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"FlickrCell" forIndexPath:indexPath];
+    TMTYelpLocationCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"FlickrCell" forIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
-    NSString *searchTerm = self.searches[indexPath.section];
     
-    cell.photo = self.searchResults[searchTerm][indexPath.row];
+    TMFYelpLocation *location = self.yelpLocations[indexPath.row];
+    cell.location = location;
+    cell.imageView.image = location.locationImage;
+    cell.name.text = location.name;
+    
     return cell;
 }
 // 4
@@ -125,10 +173,12 @@
 
 // 1
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *searchTerm = self.searches[indexPath.section];
-    FlickrPhoto *photo = self.searchResults[searchTerm][indexPath.row];
+    TMFYelpLocation *location = self.yelpLocations[indexPath.row];
+
+    location.locationImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:location.imageURL]];
+
     // 2
-    CGSize retval = photo.thumbnail.size.width > 0 ? photo.thumbnail.size : CGSizeMake(100, 100);
+    CGSize retval = CGSizeMake(200, 200);
     retval.height += 35;
     retval.width += 35;
     return retval;
@@ -142,13 +192,44 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    TMTFlickrPhotoCell *temp = sender;
-    FlickrPhoto *photoToPassOn = temp.photo;
-    TMTDetailsViewController *nextVC = segue.destinationViewController;
+    TMTYelpLocationCell *locationCell = sender;
     
-    if ([[segue identifier] isEqualToString:@"detailSegue"]) {
-        nextVC.photo = photoToPassOn;
+    TMFYelpLocation *location = locationCell.location;
+    
+    TMTDetailsViewController *nextVC = segue.destinationViewController;
+    if ([segue.identifier isEqualToString:@"detailSegue"]) {
+        nextVC.location = location;
     }
-        
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @end

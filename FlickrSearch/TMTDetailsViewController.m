@@ -9,12 +9,10 @@
 #import "TMTDetailsViewController.h"
 
 @interface TMTDetailsViewController ()
+
 - (IBAction)backButtonTapped:(id)sender;
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
-@property (strong, nonatomic) IBOutlet UILabel *secret;
-
-
-
+@property (strong, nonatomic) IBOutlet UILabel *name;
 
 @end
 
@@ -33,8 +31,8 @@
 {
     [super viewDidLoad];
     
-    self.secret.text = self.photo.secret;
-    self.imageView.image = self.photo.thumbnail;
+    self.name.text = self.location.name;
+    self.imageView.image = self.location.locationImage;
     
     // Do any additional setup after loading the view.
 }

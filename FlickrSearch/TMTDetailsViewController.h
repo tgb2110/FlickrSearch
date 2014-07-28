@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FlickrPhoto.h"
+#import "TMFYelpLocation.h"
 
 @interface TMTDetailsViewController : UIViewController
 
-@property (strong, nonatomic) FlickrPhoto *photo;
+@property (strong, nonatomic) TMFYelpLocation *location;
 
 @end
