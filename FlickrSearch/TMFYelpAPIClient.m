@@ -9,10 +9,10 @@
 #import "TMFYelpAPIClient.h"
 #import "OAuthConsumer.h"
 
-NSString *const CONSUMER_KEY = @"Qv2juF5Td1VYLYmWvZ30PA";
-NSString *const CONSUMER_SECRET = @"cXpBB5DPDEwuofi_FkyGCZ-x42Q";
-NSString *const TOKEN = @"7V1I7fWNZ2hVHcHqt6RlPyuf0N7frr9E";
-NSString *const TOKEN_SECRET = @"TlOeGtZdmOOUZyh-ILGDDHZOPis";
+NSString *const CONSUMER_KEY = @"";
+NSString *const CONSUMER_SECRET = @"";
+NSString *const TOKEN = @"";
+NSString *const TOKEN_SECRET = @"";
 
 @implementation TMFYelpAPIClient
 
